@@ -1,0 +1,640 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model CategoryProductVM
+
+
+
+
+
+
+
+
+<body>
+
+
+    <div class="mini_cart">
+        <div class="cart_gallery">
+            <div class="cart_close">
+                <div class="cart_text">
+                    <h3>cart</h3>
+                </div>
+                <div class="mini_cart_close">
+                    <a href="javascript:void(0)"><i class="icon-close icons"></i></a>
+                </div>
+            </div>
+            <div class="cart_item">
+                <div class="cart_img">
+                    <a href="#"><img src="~/assets/img/product/product1.jpg" alt=""></a>
+                </div>
+                <div class="cart_info">
+                    <a href="#">Primis In Faucibus</a>
+                    <p>1 x <span> $65.00 </span></p>
+                </div>
+                <div class="cart_remove">
+                    <a href="#"><i class="icon-close icons"></i></a>
+                </div>
+            </div>
+            <div class="cart_item">
+                <div class="cart_img">
+                    <a href="#"><img src="~/assets/img/product/product2.jpg" alt=""></a>
+                </div>
+                <div class="cart_info">
+                    <a href="#">Letraset Sheets</a>
+                    <p>1 x <span> $60.00 </span></p>
+                </div>
+                <div class="cart_remove">
+                    <a href="#"><i class="icon-close icons"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="mini_cart_table">
+            <div class="cart_table_border">
+                <div class="cart_total">
+                    <span>Sub total:</span>
+                    <span class="price">$125.00</span>
+                </div>
+                <div class="cart_total mt-10">
+                    <span>total:</span>
+                    <span class="price">$125.00</span>
+                </div>
+            </div>
+        </div>
+        <div class="mini_cart_footer">
+            <div class="cart_button">
+                <a href="cart.html"><i class="fa fa-shopping-cart"></i> View cart</a>
+            </div>
+            <div class="cart_button">
+                <a href="checkout.html"><i class="fa fa-sign-in"></i> Checkout</a>
+            </div>
+        </div>
+    </div>
+    <!--mini cart end-->
+    <!--header area start-->
+    <!--header area end-->
+    <!--shop  area start-->
+    <div class="shop_section shop_reverse">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-12">
+                    <!--sidebar widget start-->
+                    <aside class="sidebar_widget">
+                        <div class="widget_inner">
+                            <div class="widget_list widget_categories">
+                                <h2>Categories</h2>
+                                <ul>
+                                    @foreach (var parent in Model.Categories.Where(c => c.ParentCategoryId == null))
+                                    {
+                                        var collapseId = parent.Name.ToLower().Replace(" ", ""); // e.g., "Men" => "men"
+
+                                        <li class="widget_sub_categories">
+                                            <a href="javascript:void(0)" data-toggle="collapse" data-target="#@collapseId">
+                                                @parent.Name
+                                            </a>
+
+                                            <ul class="widget_dropdown_categories collapse @(Model.SelectedCategoryId == parent.Id ? "show" : "")" id="@collapseId">
+                                                @foreach (var sub in parent.SubCategories)
+                                                {
+
+                                                    <li>
+                                                        <a href="@Url.Action("ShopPage", new ProductFilterVM{ SubcategoryId=sub.Id})">
+                                                            @sub.Name 
+
+                                                        </a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="widget_list widget_filter">
+                                <h2>Filter By</h2>
+                                <form asp-action="ShopPage" method="get">
+                                    <div class="filter__list slider_range">
+                                        <h3>price</h3>
+                                        <div id="slider-range"></div>
+                                        <span>Range:</span>
+                                        <input type="text" name="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                                        <input type="hidden" name="MinPrice" id="minPriceHidden">
+                                        <input type="hidden" name="MaxPrice" id="maxPriceHidden">
+                                    </div>
+
+                                    <div class="filter__list widget_size">
+                                        <h3> size</h3>
+                                        <ul>
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox" name="Sizes" value="s" @(Model.Filter?.Sizes?.Contains("s") == true ? "checked" : "")>
+                                                    <span>S</span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox" name="Sizes" value="m" @(Model.Filter?.Sizes?.Contains("m") == true ? "checked" : "")>
+                                                    <span>M</span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox" name="Sizes" value="l" @(Model.Filter?.Sizes?.Contains("l") == true ? "checked" : "")>
+                                                    <span>L</span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox" name="Sizes" value="xl" @(Model.Filter?.Sizes?.Contains("xl") == true ? "checked" : "")>
+                                                    <span>XL</span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox" name="Sizes" value="xxl" @(Model.Filter?.Sizes?.Contains("xxl") == true ? "checked" : "")>
+                                                    <span>XXL</span>
+                                                </label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="filter__list widget_color">
+                                        <h3>color</h3>
+                                        <ul>
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox"
+                                                           name="Colors"
+                                                           value="red"
+                                                    @(Model.Filter?.Colors?.Contains("color1") == true ? "checked" : "")>
+                                                    <span class="checkmark red"></span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox"
+                                                           name="Colors"
+                                                           value="blue"
+                                                    @(Model.Filter?.Colors?.Contains("color2") == true ? "checked" : "")>
+                                                    <span class="checkmark blue"></span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox"
+                                                           name="Colors"
+                                                           value="white"
+                                                    @(Model.Filter?.Colors?.Contains("color3") == true ? "checked" : "")>
+                                                    <span class="checkmark white"></span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox"
+                                                           name="Colors"
+                                                           value="black"
+                                                    @(Model.Filter?.Colors?.Contains("color4") == true ? "checked" : "")>
+                                                    <span class="checkmark black"></span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox"
+                                                           name="Colors"
+                                                           value="yellow"
+                                                    @(Model.Filter?.Colors?.Contains("color5") == true ? "checked" : "")>
+                                                    <span class="checkmark yellow"></span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox"
+                                                           name="Colors"
+                                                           value="gray"
+                                                    @(Model.Filter?.Colors?.Contains("color6") == true ? "checked" : "")>
+                                                    <span class="checkmark gray"></span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox"
+                                                           name="Colors"
+                                                           value="not gray"
+                                                    @(Model.Filter?.Colors?.Contains("color7") == true ? "checked" : "")>
+                                                    <span class="checkmark not gray"></span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox"
+                                                           name="Colors"
+                                                           value="purble"
+                                                    @(Model.Filter?.Colors?.Contains("color8") == true ? "checked" : "")>
+                                                    <span class="checkmark purble"></span>
+                                                </label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="filter__list widget_brands">
+                                        <h3 data-toggle="collapse" data-target="#brands">brands</h3>
+                                        <ul class="widget_dropdown_categories collapse show" id="brands">
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox" name="Brands" value="The North Face" @(Model.Filter?.Brands?.Contains("The North Face") == true ? "checked" : "")>
+                                                    <span>The North Face <span>104</span></span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox" name="Brands" value="Zara Basic" @(Model.Filter?.Brands?.Contains("Zara Basic") == true ? "checked" : "")>
+                                                    <span>Zara Basic <span>68</span></span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox" name="Brands" value="Moschino" @(Model.Filter?.Brands?.Contains("Moschino") == true ? "checked" : "")>
+                                                    <span>Moschino <span>75</span></span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox" name="Brands" value="Supreme" @(Model.Filter?.Brands?.Contains("Supreme") == true ? "checked" : "")>
+                                                    <span>Supreme <span>30</span></span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox" name="Brands" value="Ecko Unltd" @(Model.Filter?.Brands?.Contains("Ecko Unltd") == true ? "checked" : "")>
+                                                    <span>Ecko Unltd <span>150</span></span>
+                                                </label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                                    <button type="button" class="btn btn-secondary" id="resetFilters">Reset Filters</button>
+                                </form>
+                            </div>
+                            <div class="widget_list">
+                                <h2>Recent Product</h2>
+                                <div class="recent_product">
+                                    <div class="recent_product_list d-flex mb-25">
+                                        <div class="recent_thumb">
+                                            <a href="product-details.html"><img src="~/assets/img/product/product4.jpg" alt=""></a>
+                                        </div>
+                                        <div class="recent_content">
+                                            <h4><a href="product-details.html">Barbour T-shirt <br> International</a></h4>
+                                            <span>$32.00</span>
+                                        </div>
+                                    </div>
+                                    <div class="recent_product_list d-flex">
+                                        <div class="recent_thumb">
+                                            <a href="product-details.html"><img src="~/assets/img/product/product6.jpg" alt=""></a>
+                                        </div>
+                                        <div class="recent_content">
+                                            <h4><a href="product-details.html">Barbour T-shirt <br> International</a></h4>
+                                            <span>$32.00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                    <!--sidebar widget end-->
+                </div>
+                <div class="col-lg-9 col-md-12">
+                    <!--shop wrapper start-->
+                    <!--breadcrumbs area start-->
+                    <div class="breadcrumb_content">
+                     
+                    </div>
+                    <!--breadcrumbs area end-->
+                    <div class="shop_banner">
+                        <img src="@Url.Content("~/assets/img/bg/shop_bg.jpg")" alt="Essential Wears Banner" style="width: 100%; display: block;">
+                        <div class="shop_banner_text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white;">
+                           
+                        </div>
+                    </div>
+                    <!--shop toolbar start-->
+                    <div class="shop_toolbar_wrapper d-flex justify-content-between align-items-center">
+                        <div class="page_amount">
+                            <p><span>@Model.Products.Count?</span> Products Found</p>
+                        </div>
+                        <div class=" sorting_by d-flex align-items-center">
+                            <span>SORT BY :</span>
+                            <form class="select_option" action="#">
+                                <select name="orderby" id="short">
+
+                                    <option selected value="1">NAME       3</option>
+                                    <option value="2">NAME  4</option>
+                                    <option value="3">NAME  5</option>
+                                    <option value="4">NAME  6</option>
+                                    <option value="5">NAME  7</option>
+                                    <option value="6">NAME  8</option>
+                                </select>
+                            </form>
+                        </div>
+                        <div class="toolbar_btn_wrapper d-flex align-items-center">
+                            <div class="view_btn">
+                                <a class="view" href="#">VIEW</a>
+                            </div>
+                            <div class="shop_toolbar_btn">
+                                <ul class="d-flex align-items-center">
+                                    <li><a href="#" class="active btn-grid-3" data-role="grid_3" data-tippy="3" data-tippy-inertia="true" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-placement="top"><i class="ion-grid"></i></a></li>
+
+                                    <li><a href="#" class="btn-list" data-role="grid_list" data-tippy="List" data-tippy-inertia="true" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-placement="top"><i class="ion-navicon"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!--shop toolbar end-->
+                    <div class="row shop_wrapper">
+                        @foreach (var product in Model.Products)
+                        {
+                            <div class="col-lg-4 col-md-4 col-sm-6 col-6 ">
+                                <div class="single_product">
+                                    <div class="product_thumb">
+                                        @{
+                                            var apiBaseUrl = "https://localhost:7019";
+                                            var imageUrl = product.Images != null && product.Images.Any()
+                                            ? apiBaseUrl + product.Images.First().ImageUrl
+                                            : apiBaseUrl + "/assets/img/product/default.jpg";
+                                        }
+                                        <img class="primary_img" src="@imageUrl" alt="@product.Name" />
+
+                                        <div class="product_action">
+                                            <ul>
+                                                <li class="wishlist"><a href="#" data-tippy="Wishlist"><i class="icon-heart icons"></i></a></li>
+                                                <li class="quick_view">
+                                                    <a href="javascript:void(0);"
+                                                       class="quick-view-btn"
+                                                       data-id="@product.Id"
+                                                       data-name="@product.Name"
+                                                       data-description="@product.Description"
+                                                       data-price="@product.Price"
+                                                       data-image="@imageUrl">
+                                                        <i class="icon-size-fullscreen icons"></i>
+                                                    </a>
+                                               
+                                                </li>
+                                                <li class="compare"><a data-tippy="Compare" href="#"><i class="icon-refresh icons"></i></a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="product_label">
+                                            <span>@product.CategoryName</span>
+                                        </div>
+                                    </div>
+                                    <div class="product_content grid_content text-center">
+                                        <div class="product_ratting">
+                                            <ul class="d-flex justify-content-center">
+                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                <li><span>(0)</span></li>
+                                            </ul>
+                                        </div>
+                                        <h4 class="product_name"><a href="@($"/product-details/{product.Id}")">@product.Name</a></h4>
+                                        <div class="price_box">
+                                            <span class="current_price">@product.Price.ToString("C")</span>
+                                        </div>
+                                        <div class="add_to_cart">
+                                            <a class="btn btn-primary" href="#">Add To Cart</a>
+                                        </div>
+                                    </div>
+                                    <div class="product_list_content">
+                                        <h4 class="product_name"><a href="@($"/product-details/{product.Id}")">@product.Name</a></h4>
+                                        <p>@product.Description</p>
+                                        <div class="price_box">
+                                            <span class="current_price">@product.Price.ToString("C")</span>
+                                        </div>
+                                        <div class="product_desc">
+                                            <p>@product.Description</p>
+                                        </div>
+                                        <div class="add_to_cart">
+                                            <a class="btn btn-primary" href="#">Add To Cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div>
+                        @if (Model.CurrentPage > 1)
+                        {
+                            <a href="@Url.Action("ShopPage", new ProductFilterVM { PageNumber = Model.CurrentPage - 1})">Previous</a>
+                        }
+
+                        <span><b>Page</b> @Model.CurrentPage  </span>
+
+                        <a href="@Url.Action("ShopPage", new ProductFilterVM { PageNumber = Model.CurrentPage + 1})">Next</a>
+                    </div>
+
+                    <!--shop toolbar end-->
+                    <!--shop wrapper end-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--shop  area end-->
+    <!--newsletter section start-->
+    <section class="newsletter_section newsletter_padding border-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="newsletter_inner d-flex justify-content-between align-items-center">
+                        <div class="newsletter_text">
+                            <h3>keep connected</h3>
+                            <p>Get updates by subscribe our weekly newsletter</p>
+                        </div>
+                        <div class="newsletter_subscribe">
+                            <form id="mc-form">
+                                <input class="border-0" id="mc-email" type="email" autocomplete="off" placeholder="Enter your email address">
+                                <i class="icon-envelope-open icons"></i>
+                                <button class="border-0" id="mc-submit">Subscribe</button>
+                            </form>
+                            <!-- mailchimp-alerts Start -->
+                            <div class="mailchimp-alerts text-centre">
+                                <div class="mailchimp-submitting"></div><!-- mailchimp-submitting end -->
+                                <div class="mailchimp-success"></div><!-- mailchimp-success end -->
+                                <div class="mailchimp-error"></div><!-- mailchimp-error end -->
+                            </div><!-- mailchimp-alerts end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--newsletter section end-->
+    <!--footer area start-->
+    <!-- modal area start-->
+    <div class="modal fade" id="modal_box" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="ion-android-close"></i></span>
+                </button>
+                <div class="modal_body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="modal_zoom_gallery">
+                                    <div class="product_zoom_thumb">
+                                        <img id="modal-product-image" src="" alt="" class="img-fluid" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="modal_right">
+                                    <div class="modal_title mb-10">
+                                        <h2 id="modal-product-name"></h2>
+                                    </div>
+                                    <div class="modal_price mb-10">
+                                        <span class="new_price" id="modal-product-price"></span>
+                                    </div>
+                                    <div class="modal_description mb-15">
+                                        <p id="modal-product-description"></p>
+                                    </div>
+                                    <div class="modal_social">
+                                        <h2>Share this product</h2>
+                                        <ul>
+                                            <li class="facebook"><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                            <li class="twitter"><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                            <li class="pinterest"><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                                            <li class="google-plus"><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                                            <li class="linkedin"><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal area end-->
+    <!-- JS
+    ============================================ -->
+    <!-- Main JS -->
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Price slider JavaScript (ensure correct form targeting)
+        const sliderRange = document.getElementById('slider-range');
+        const amountInput = document.getElementById('amount');
+        const minPriceHidden = document.getElementById('minPriceHidden');
+        const maxPriceHidden = document.getElementById('maxPriceHidden');
+        const filterForm = document.querySelector('.widget_filter form');
+
+        if (sliderRange && amountInput && minPriceHidden && maxPriceHidden && filterForm) {
+            $(function() {
+                $(sliderRange).slider({
+                    range: true,
+                    min: 0, // Adjust
+                    max: 1000, // Adjust
+                    values: [
+                        @(Model.Filter?.MinPrice != null ? Model.Filter.MinPrice : 0),
+                        @(Model.Filter?.MaxPrice != null ? Model.Filter.MaxPrice : 1000)
+                    ],
+                    slide: function(event, ui) {
+                        amountInput.value = "$" + ui.values[0] + " - $" + ui.values[1];
+                        minPriceHidden.value = ui.values[0];
+                        maxPriceHidden.value = ui.values[1];
+                    }
+                });
+                amountInput.value = "$" + $(sliderRange).slider("values", 0) + " - $" + $(sliderRange).slider("values", 1);
+                minPriceHidden.value = $(sliderRange).slider("values", 0);
+                maxPriceHidden.value = $(sliderRange).slider("values", 1);
+            });
+        }
+
+        // Size links JavaScript (ensure correct form targeting)
+        const sizeLinks = document.querySelectorAll('.widget_size ul li a');
+        sizeLinks.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                const sizeValue = this.dataset.value;
+                const linkName = this.getAttribute('name');
+                const filterForm = this.closest('.widget_filter')?.querySelector('form');
+                if (filterForm) {
+                    const existingCheckbox = filterForm.querySelector(`input[type="checkbox"][name="${linkName}"][value="${sizeValue}"]`);
+                    if (existingCheckbox) {
+                        existingCheckbox.checked = !existingCheckbox.checked;
+                    } else {
+                        const input = document.createElement('input');
+                        input.type = 'checkbox';
+                        input.name = linkName;
+                        input.value = sizeValue;
+                        input.checked = true;
+                        filterForm.appendChild(input);
+                    }
+                    filterForm.submit(); // Ensure form submission happens
+                }
+            });
+        });
+
+        // Reset button JavaScript (ensure correct form targeting)
+        const resetFiltersButton = document.getElementById('resetFilters');
+        if (resetFiltersButton) {
+            resetFiltersButton.addEventListener('click', function() {
+                const filterForm = this.closest('form');
+                if (filterForm) {
+                    filterForm.reset();
+                    const sliderRange = filterForm.querySelector('#slider-range');
+                    const amountInput = filterForm.querySelector('#amount');
+                    const minPriceHidden = filterForm.querySelector('#minPriceHidden');
+                    const maxPriceHidden = filterForm.querySelector('#maxPriceHidden');
+                    if (sliderRange) $(sliderRange).slider("values", [0, 1000]);
+                    if (amountInput) amountInput.value = "$0 - $1000";
+                    if (minPriceHidden) minPriceHidden.value = '';
+                    if (maxPriceHidden) maxPriceHidden.value = '';
+                    filterForm.submit();
+                }
+            });
+        }
+    });
+</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".quick-view-btn").forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    const name = this.dataset.name;
+                    const description = this.dataset.description;
+                    const price = this.dataset.price;
+                    const image = this.dataset.image;
+
+                    document.getElementById("modal-product-name").textContent = name;
+                    document.getElementById("modal-product-description").textContent = description;
+                    document.getElementById("modal-product-price").textContent = "$" + price;
+                    document.getElementById("modal-product-image").src = image;
+
+                    $("#modal_box").modal("show");
+                });
+            });
+        });
+    </script>
+
+<style>
+        .checkmark {
+        display: inline-block;
+        width: 1em; /* Adjust size */
+        height: 1em; /* Adjust size */
+        border-radius: 50%; /* Make it a circle */
+        margin-right: 0.5em; /* Spacing */
+        }
+
+        .red { background-color: red; }
+        .blue { background-color: blue; }
+        .white { background-color: white; border: 1px solid #ccc; /* For visibility */ }
+        .black { background-color: black; }
+        .yellow { background-color: yellow; }
+        .gray { background-color: gray; }
+        .not\.gray { background-color: lightgreen; } /* Note the escaped period */
+			.purble {
+				background-color: purple; /* Correct spelling */
+			}</style>
+
+
+ </body>
+

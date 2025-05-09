@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\Ecommerse_Project_MVC.props" />
+</Project>
