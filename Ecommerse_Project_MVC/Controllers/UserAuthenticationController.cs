@@ -1,6 +1,4 @@
-﻿
-
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Ecommerse_Project_MVC.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
@@ -17,7 +15,7 @@ namespace Ecommerse_Project_MVC.Controllers
         {
    
             _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri("https://localhost:7019");
+            _httpClient.BaseAddress = new Uri(" https://localhost:7019");
         }
         [HttpGet]
         public  IActionResult Register()
@@ -75,15 +73,26 @@ namespace Ecommerse_Project_MVC.Controllers
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = true,
+                ExpiresUtc = DateTimeOffset.UtcNow.AddDays(30),
+                AllowRefresh = true
+            };
 
-            // Optionally store the JWT token as a HttpOnly cookie
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                principal,
+                authProperties);
+
+            // Store the JWT token as a HttpOnly cookie
             HttpContext.Response.Cookies.Append("AuthToken", token, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
-                Expires = DateTime.UtcNow.AddDays(1),
-                SameSite = SameSiteMode.Strict
+                Expires = DateTime.UtcNow.AddDays(30),
+                SameSite = SameSiteMode.Strict,
+                IsEssential = true
             });
         }
         [HttpPost]

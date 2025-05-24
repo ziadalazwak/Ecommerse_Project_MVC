@@ -1,0 +1,275 @@
+﻿<!--Checkout page section-->
+@model OrderPageVM
+<div class="checkout_section" id="accordion">
+    <div class="container">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        <div class="returning_coupon_area">
+            <div class="row">
+
+                <div class="col-lg-5 col-md-6">
+                    <div class="user-actions">
+                        <h3>
+                            <i class="fa fa-comment-o" aria-hidden="true"></i>
+                            Have a Coupon ?
+                            <a class="Returning" href="#" data-toggle="collapse" data-target="#checkout_coupon2" aria-expanded="true">Click here to enter your code</a>
+
+                        </h3>
+                        <div id="checkout_coupon2" class="collapse" data-parent="#accordion">
+                            <div class="checkout_info coupon_info">
+                                <form action="#">
+                                    <input placeholder="Coupon code" type="text">
+                                    <button class="btn btn-primary" type="submit">Apply coupon</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="checkout_form">
+            <div class="row">
+                <div class="col-lg-7 col-md-6">
+                    <form asp-action="CreateOrder" asp-controller="Order" method="post">
+                        <input type="number" name="CartId" value="@Model.cart.Id" hidden />
+                    
+                        <h3>Billing Details</h3>
+                        <div class="checkout_form_input">
+                            <label for="country">Country <span>*</span></label>
+                            <select class="select_option" name="Country" id="country" required>
+                                <option value="United Kingdom">United Kingdom (UK)</option>
+                                <option value="Algeria">Algeria</option>
+                                <option value="Egypt">Egypt</option>
+                                <option value="Ghana">Ghana</option>
+                                <option value="Albania">Albania</option>
+                                <option value="Bahrain">Bahrain</option>
+                                <option value="Colombia">Colombia</option>
+                                <option value="Dominican Republic">Dominican Republic</option>
+                            </select>
+                        </div>
+                        <div class="checkout_form_input">
+                            <label>First Name <span>*</span></label>
+                            <input type="text" value="@Model.accountDetails.FirstName" name="FirstName" readonly>
+                        </div>
+                        <div class="checkout_form_input">
+                            <label>Last Name <span>*</span></label>
+                            <input type="text" value="@Model.accountDetails.LastName" name="LastName" readonly>
+                        </div>
+                        <div class="checkout_form_input">
+                            <label>Address <span>*</span></label>
+                            <div class="d-flex align-items-center gap-2">
+                                <select class="select_option flex-grow-1" id="addressSelect" name="ShippingAddress.Street" required>
+                                    @foreach (var address in Model.accountDetails.Address)
+                                    {
+                                        <option value="@address.Street" 
+                                                data-city="@address.City" 
+                                                data-governorate="@address.Governorate"
+                                                data-firstname="@Model.accountDetails.FirstName"
+                                                data-lastname="@Model.accountDetails.LastName">
+                                            @address.Street, @address.City, @address.Governorate
+                                        </option>
+                                    }
+                                </select>
+                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                                    <i class="fas fa-plus"></i> Add New Address
+                                </button>
+                            </div>
+                        </div>
+                        <input type="hidden" name="ShippingAddress.City" id="selectedCity" />
+                        <input type="hidden" name="ShippingAddress.Governorate" id="selectedGovernorate" />
+                        <input type="hidden" name="ShippingAddress.FirstName" value="@Model.accountDetails.FirstName" />
+                        <input type="hidden" name="ShippingAddress.LastName" value="@Model.accountDetails.LastName" />
+                        <div class="checkout_form_input">
+                            <label>Email Address <span>*</span></label>
+                            <input type="email" value="@Model.accountDetails.Email" name="Email" readonly>
+                        </div>
+                        <div class="checkout_form_input">
+                            <label>Phone <span>*</span></label>
+                            <input type="text" value="@Model.accountDetails.phone" name="Phone" readonly>
+                        </div>
+                        <div class="checkout_form_input">
+                            <label>Payment Method <span>*</span></label>
+                            <select class="select_option" name="DeliveryMethodId" required>
+                                <option value="1">Direct Bank Transfer</option>
+                                <option value="2">Cheque Payment</option>
+                                <option value="3">Cash on Delivery</option>
+                                <option value="4">PayPal</option>
+                            </select>
+                        </div>
+                        <div class="checkout_form_input">
+                            <label>Order Notes</label>
+                            <textarea name="OrderNotes" placeholder="Notes about your order, e.g. special notes for delivery"></textarea>
+                        </div>
+                        <input type="hidden" name="CartItems" value="@Json.Serialize(Model.cart.cartItems)" />
+                        <input type="hidden" name="TotalAmount" value="@Model.cart.TotalPrice" />
+                        <div class="place_order_btn">
+                            <button type="submit" class="btn btn-primary">Place Order</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-5 col-md-6">
+                    <div class="order_table_right">
+                        <h3>Your Order</h3>
+                        <div class="order_table table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th class="text-right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach(var product in Model.cart.cartItems) {
+                                        <tr>
+                                            @{
+                                                var price = product.Price * product.Quantity;
+                                            }
+                                            <td>@product.ProductName x @product.Quantity</td>
+                                            <td class="text-right">$@price</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>Cart Subtotal</td>
+                                        <td class="text-right">$@Model.cart.TotalPrice</td>
+                                    </tr>
+                                    <tr class="order_total">
+                                        <th>Order Total</th>
+                                        <td class="text-right">$@Model.cart.TotalPrice</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Checkout page section end-->
+<!--newsletter section start-->
+<section class="newsletter_section newsletter_padding border-top">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="newsletter_inner d-flex justify-content-between align-items-center">
+                    <div class="newsletter_text">
+                        <h3>keep connected</h3>
+                        <p>Get updates by subscribe our weekly newsletter</p>
+                    </div>
+                    <div class="newsletter_subscribe">
+                        <form id="mc-form">
+                            <input class="border-0" id="mc-email" type="email" autocomplete="off" placeholder="Enter your email address">
+                            <i class="icon-envelope-open icons"></i>
+                            <button class="border-0" id="mc-submit">Subscribe</button>
+                        </form>
+                        <!-- mailchimp-alerts Start -->
+                        <div class="mailchimp-alerts text-centre">
+                            <div class="mailchimp-submitting"></div><!-- mailchimp-submitting end -->
+                            <div class="mailchimp-success"></div><!-- mailchimp-success end -->
+                            <div class="mailchimp-error"></div><!-- mailchimp-error end -->
+                        </div><!-- mailchimp-alerts end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Add Address Modal -->
+<div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addAddressModalLabel">Add New Address</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addAddressForm" asp-action="AddAddress" asp-controller="Order" method="post">
+                    <div class="mb-3">
+                        <label for="country" class="form-label">Country <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="country" name="Country" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="street" class="form-label">Street <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="street" name="Street" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="city" class="form-label">City <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="city" name="City" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="governorate" class="form-label">Governorate <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="governorate" name="Governorate" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Address</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addressSelect = document.getElementById('addressSelect');
+            const selectedCity = document.getElementById('selectedCity');
+            const selectedGovernorate = document.getElementById('selectedGovernorate');
+            
+            // Function to update form fields based on selected address
+            function updateAddressFields() {
+                const selectedOption = addressSelect.options[addressSelect.selectedIndex];
+                selectedCity.value = selectedOption.dataset.city;
+                selectedGovernorate.value = selectedOption.dataset.governorate;
+            }
+
+            // Initial update
+            updateAddressFields();
+
+            // Update fields when selection changes
+            addressSelect.addEventListener('change', updateAddressFields);
+
+            // Handle address form submission
+            const addAddressForm = document.getElementById('addAddressForm');
+            addAddressForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                try {
+                    const formData = new FormData(this);
+                    const response = await fetch('@Url.Action("AddAddress", "Order")', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        location.reload();
+                    } else {
+                        alert(result.message || 'Failed to add address');
+                    }
+                } catch (error) {
+                    alert('An error occurred while adding the address');
+                }
+            });
+        });
+    </script>
+}
+
+

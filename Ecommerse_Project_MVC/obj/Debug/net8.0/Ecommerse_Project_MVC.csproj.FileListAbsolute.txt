@@ -52,3 +52,4 @@ D:\Projects\Ecommerse_Project_MVC\Ecommerse_Project_MVC\obj\Debug\net8.0\Ecommer
 D:\Projects\Ecommerse_Project_MVC\Ecommerse_Project_MVC\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\Projects\Ecommerse_Project_MVC\Ecommerse_Project_MVC\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
 D:\Projects\Ecommerse_Project_MVC\Ecommerse_Project_MVC\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\Projects\Ecommerse_Project_MVC\Ecommerse_Project_MVC\obj\Debug\net8.0\Ecommerse_Project_MVC.sourcelink.json

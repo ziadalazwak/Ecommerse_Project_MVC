@@ -13,8 +13,9 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="modal_zoom_gallery">
                                     <div class="product_zoom_thumb">
-                                    @{
-                                        var apiBaseUrl = "https://localhost:7019";
+                                        @{
+
+                                            var apiBaseUrl = " https://localhost:7019";
                                         var imageUrl = Model.Images != null && Model.Images.Any()
                                         ? apiBaseUrl + Model.Images.First().ImageUrl
                                         : apiBaseUrl + "/assets/img/product/default.jpg";

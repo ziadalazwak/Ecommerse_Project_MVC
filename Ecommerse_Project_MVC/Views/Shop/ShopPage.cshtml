@@ -11,66 +11,9 @@
 
 
 
-
 <body>
 
 
-    <div class="mini_cart">
-        <div class="cart_gallery">
-            <div class="cart_close">
-                <div class="cart_text">
-                    <h3>cart</h3>
-                </div>
-                <div class="mini_cart_close">
-                    <a href="javascript:void(0)"><i class="icon-close icons"></i></a>
-                </div>
-            </div>
-            <div class="cart_item">
-                <div class="cart_img">
-                    <a href="#"><img src="~/assets/img/product/product1.jpg" alt=""></a>
-                </div>
-                <div class="cart_info">
-                    <a href="#">Primis In Faucibus</a>
-                    <p>1 x <span> $65.00 </span></p>
-                </div>
-                <div class="cart_remove">
-                    <a href="#"><i class="icon-close icons"></i></a>
-                </div>
-            </div>
-            <div class="cart_item">
-                <div class="cart_img">
-                    <a href="#"><img src="~/assets/img/product/product2.jpg" alt=""></a>
-                </div>
-                <div class="cart_info">
-                    <a href="#">Letraset Sheets</a>
-                    <p>1 x <span> $60.00 </span></p>
-                </div>
-                <div class="cart_remove">
-                    <a href="#"><i class="icon-close icons"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="mini_cart_table">
-            <div class="cart_table_border">
-                <div class="cart_total">
-                    <span>Sub total:</span>
-                    <span class="price">$125.00</span>
-                </div>
-                <div class="cart_total mt-10">
-                    <span>total:</span>
-                    <span class="price">$125.00</span>
-                </div>
-            </div>
-        </div>
-        <div class="mini_cart_footer">
-            <div class="cart_button">
-                <a href="cart.html"><i class="fa fa-shopping-cart"></i> View cart</a>
-            </div>
-            <div class="cart_button">
-                <a href="checkout.html"><i class="fa fa-sign-in"></i> Checkout</a>
-            </div>
-        </div>
-    </div>
     <!--mini cart end-->
     <!--header area start-->
     <!--header area end-->
@@ -88,7 +31,7 @@
                                     @foreach (var parent in Model.Categories.Where(c => c.ParentCategoryId == null))
                                     {
                                         var collapseId = parent.Name.ToLower().Replace(" ", ""); // e.g., "Men" => "men"
-
+                                        
                                         <li class="widget_sub_categories">
                                             <a href="javascript:void(0)" data-toggle="collapse" data-target="#@collapseId">
                                                 @parent.Name
@@ -163,8 +106,8 @@
                                             <li>
                                                 <label>
                                                     <input type="checkbox"
-                                                           name="Colors"
-                                                           value="red"
+                                                    name="Colors"
+                                                    value="red"
                                                     @(Model.Filter?.Colors?.Contains("color1") == true ? "checked" : "")>
                                                     <span class="checkmark red"></span>
                                                 </label>
@@ -172,8 +115,8 @@
                                             <li>
                                                 <label>
                                                     <input type="checkbox"
-                                                           name="Colors"
-                                                           value="blue"
+                                                    name="Colors"
+                                                    value="blue"
                                                     @(Model.Filter?.Colors?.Contains("color2") == true ? "checked" : "")>
                                                     <span class="checkmark blue"></span>
                                                 </label>
@@ -181,8 +124,8 @@
                                             <li>
                                                 <label>
                                                     <input type="checkbox"
-                                                           name="Colors"
-                                                           value="white"
+                                                    name="Colors"
+                                                    value="white"
                                                     @(Model.Filter?.Colors?.Contains("color3") == true ? "checked" : "")>
                                                     <span class="checkmark white"></span>
                                                 </label>
@@ -190,8 +133,8 @@
                                             <li>
                                                 <label>
                                                     <input type="checkbox"
-                                                           name="Colors"
-                                                           value="black"
+                                                    name="Colors"
+                                                    value="black"
                                                     @(Model.Filter?.Colors?.Contains("color4") == true ? "checked" : "")>
                                                     <span class="checkmark black"></span>
                                                 </label>
@@ -199,8 +142,8 @@
                                             <li>
                                                 <label>
                                                     <input type="checkbox"
-                                                           name="Colors"
-                                                           value="yellow"
+                                                    name="Colors"
+                                                    value="yellow"
                                                     @(Model.Filter?.Colors?.Contains("color5") == true ? "checked" : "")>
                                                     <span class="checkmark yellow"></span>
                                                 </label>
@@ -208,8 +151,8 @@
                                             <li>
                                                 <label>
                                                     <input type="checkbox"
-                                                           name="Colors"
-                                                           value="gray"
+                                                    name="Colors"
+                                                    value="gray"
                                                     @(Model.Filter?.Colors?.Contains("color6") == true ? "checked" : "")>
                                                     <span class="checkmark gray"></span>
                                                 </label>
@@ -217,8 +160,8 @@
                                             <li>
                                                 <label>
                                                     <input type="checkbox"
-                                                           name="Colors"
-                                                           value="not gray"
+                                                    name="Colors"
+                                                    value="not gray"
                                                     @(Model.Filter?.Colors?.Contains("color7") == true ? "checked" : "")>
                                                     <span class="checkmark not gray"></span>
                                                 </label>
@@ -226,8 +169,8 @@
                                             <li>
                                                 <label>
                                                     <input type="checkbox"
-                                                           name="Colors"
-                                                           value="purble"
+                                                    name="Colors"
+                                                    value="purble"
                                                     @(Model.Filter?.Colors?.Contains("color8") == true ? "checked" : "")>
                                                     <span class="checkmark purble"></span>
                                                 </label>
@@ -304,19 +247,19 @@
                     <!--shop wrapper start-->
                     <!--breadcrumbs area start-->
                     <div class="breadcrumb_content">
-                     
+
                     </div>
                     <!--breadcrumbs area end-->
                     <div class="shop_banner">
                         <img src="@Url.Content("~/assets/img/bg/shop_bg.jpg")" alt="Essential Wears Banner" style="width: 100%; display: block;">
                         <div class="shop_banner_text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white;">
-                           
+
                         </div>
                     </div>
                     <!--shop toolbar start-->
                     <div class="shop_toolbar_wrapper d-flex justify-content-between align-items-center">
                         <div class="page_amount">
-                            <p><span>@Model.Products.Count?</span> Products Found</p>
+                            <p><span>@Model.Products.Count</span> Products Found</p>
                         </div>
                         <div class=" sorting_by d-flex align-items-center">
                             <span>SORT BY :</span>
@@ -346,34 +289,47 @@
                         </div>
                     </div>
                     <!--shop toolbar end-->
+                    @if (TempData["Message"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            @TempData["Message"]
+                        </div>
+                    }
                     <div class="row shop_wrapper">
+
                         @foreach (var product in Model.Products)
                         {
-                            <div class="col-lg-4 col-md-4 col-sm-6 col-6 ">
+                            
+                            <div class="col-lg-4 col-md-4 col-sm-6 col-6">sd
                                 <div class="single_product">
                                     <div class="product_thumb">
+                                        
                                         @{
                                             var apiBaseUrl = "https://localhost:7019";
-                                            var imageUrl = product.Images != null && product.Images.Any()
-                                            ? apiBaseUrl + product.Images.First().ImageUrl
-                                            : apiBaseUrl + "/assets/img/product/default.jpg";
+                                            var imagePath = product.Images != null && product.Images.Any()
+                                            ? product.Images.First().ImageUrl
+                                            
+                                            : "/assets/img/product/default.jpg";
+
+                                            var imageUrl = apiBaseUrl + imagePath;
                                         }
-                                        <img class="primary_img" src="@imageUrl" alt="@product.Name" />
+                                        <a asp-action="GetProduct" asp-route-id="@product.Id" asp-controller="ProductDetails">
+                                            <img class="primary_img" src="@imageUrl" alt="@product.Name" />
+                                        </a>
 
                                         <div class="product_action">
                                             <ul>
                                                 <li class="wishlist"><a href="#" data-tippy="Wishlist"><i class="icon-heart icons"></i></a></li>
                                                 <li class="quick_view">
                                                     <a href="javascript:void(0);"
-                                                       class="quick-view-btn"
-                                                       data-id="@product.Id"
-                                                       data-name="@product.Name"
-                                                       data-description="@product.Description"
-                                                       data-price="@product.Price"
-                                                       data-image="@imageUrl">
+                                                    class="quick-view-btn"
+                                                    data-id="@product.Id"
+                                                    data-name="@product.Name"
+                                                    data-description="@product.Description"
+                                                    data-price="@product.Price"
+                                                    data-image="@imageUrl">
                                                         <i class="icon-size-fullscreen icons"></i>
                                                     </a>
-                                               
                                                 </li>
                                                 <li class="compare"><a data-tippy="Compare" href="#"><i class="icon-refresh icons"></i></a></li>
                                             </ul>
@@ -393,30 +349,39 @@
                                                 <li><span>(0)</span></li>
                                             </ul>
                                         </div>
-                                        <h4 class="product_name"><a href="@($"/product-details/{product.Id}")">@product.Name</a></h4>
+                                        <h4 class="product_name">
+                                            <a href="@Url.Action("GetProduct", "ProductDetails", new { id = product.Id })">@product.Name</a>
+                                        </h4>
                                         <div class="price_box">
                                             <span class="current_price">@product.Price.ToString("C")</span>
                                         </div>
-                                        <div class="add_to_cart">
-                                            <a class="btn btn-primary" href="#">Add To Cart</a>
-                                        </div>
-                                    </div>
-                                    <div class="product_list_content">
-                                        <h4 class="product_name"><a href="@($"/product-details/{product.Id}")">@product.Name</a></h4>
-                                        <p>@product.Description</p>
-                                        <div class="price_box">
-                                            <span class="current_price">@product.Price.ToString("C")</span>
-                                        </div>
-                                        <div class="product_desc">
-                                            <p>@product.Description</p>
-                                        </div>
-                                        <div class="add_to_cart">
-                                            <a class="btn btn-primary" href="#">Add To Cart</a>
+
+                                        <!-- Individual form per product -->
+                                        <form asp-action="AddToCart" asp-controller="Cart" method="post">
+                                           
+                                            @{
+                                                var imageUrlfirst = product.Images != null && product.Images.Any()
+                                                ? apiBaseUrl + product.Images.First().ImageUrl
+                                                : apiBaseUrl + "/assets/img/product/default.jpg";
+                                            }
+                                               <input type="text" name="ImageUrl" value="@imageUrlfirst"  hidden  />
+                                                <input type="text" name="ProductName" value="@product.Name" hidden />
+                                                <input type="number" name="Price" value="@product.Price" hidden />
+                                                <div class="add_to_cart">
+                                                    <button type="submit" class="btn btn-primary">Add To Cart</button>
+                                                </div>
+                                            <input type="number" name="ProductId" value="@product.Id" hidden />
+                                            <input type="number" name="Id" value="@product.Id" hidden />
+                                           
+
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        }
+                      
+
+                            }
+
                     </div>
                     <div>
                         @if (Model.CurrentPage > 1)

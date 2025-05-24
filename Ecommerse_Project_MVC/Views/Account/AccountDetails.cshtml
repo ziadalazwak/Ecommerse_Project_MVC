@@ -117,37 +117,50 @@
                             </form>
                         </div>
                     </div>
-                    @foreach (var address in Model.Address)
-                    {
-                        <div class="container py-5 address-left-top">
-                            <div class="row">
-                                <div class="col-md-7 col-lg-5">
-                                    <div class="card address-card shadow-lg border-0">
-                                        <div class="card-body p-4">
-                                            <h5 class="card-title mb-4 text-center fw-bold">Home Address</h5>
-                                            <form class="addressForm" autocomplete="off">
-                                                <div class="mb-3">
-                                                    <label class="form-label">State</label>
-                                                    <input type="text" class="form-control" value="@address.State" disabled>
+                    <div class="row">
+                        @foreach (var address in Model.Address)
+                        {
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="card address-card shadow-lg border-0">
+                                    <div class="card-body p-4">
+                                        <h5 class="card-title mb-4 text-center fw-bold">Home Address</h5>
+                                        <form class="addressForm" asp-action="UpdateAddress" asp-controller="Account" method="post">
+                                            <input type="hidden" name="Id" value="@address.Id" />
+                                            <div class="mb-3">
+                                                <label class="form-label">Country</label>
+                                                <input type="text" class="form-control" name="Country" value="@address.Country" disabled>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Governorate</label>
+                                                <input type="text" class="form-control" name="Governorate" value="@address.Governorate" disabled>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Street</label>
+                                                <input type="text" class="form-control" name="Street" value="@address.Street" disabled>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6 mb-2 mb-md-0">
+                                                    <label class="form-label">City</label>
+                                                    <input type="text" class="form-control" name="City" value="@address.City" disabled>
                                                 </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Street</label>
-                                                    <input type="text" class="form-control" value="@address.Street" disabled>
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6 mb-2 mb-md-0">
-                                                        <label class="form-label">City</label>
-                                                        <input type="text" class="form-control" value="@address.City" disabled>
-                                                    </div>
-                                                </div>
-                                                <button type="button" class="btn btn-primary w-100 fw-bold py-2 editSaveBtn" onclick="toggleAddressEdit(this)">Edit</button>
-                                            </form>
-                                        </div>
+                                            </div>
+                                            <div class="d-flex gap-2">
+                                                <button type="button" class="btn btn-primary flex-grow-1 fw-bold py-2 editSaveBtn" onclick="toggleAddressEdit(this)">Edit</button>
+                                                <button type="submit" class="btn btn-success flex-grow-1 fw-bold py-2 saveBtn" style="display: none;">Save</button>
+                                              
+                                            </div>
+                                        </form>
+                                        <form asp-action="DeleteAddress" asp-controller="Account" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this address?');">
+                                            <input type="hidden" name="AddressId" value="@address.Id" />
+                                            <button type="submit" class="btn btn-danger fw-bold py-2">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    }
+                        }
+                    </div>
 
                     <!-- Recent Orders -->
                     <div class="card mt-4">
@@ -246,10 +259,13 @@
     <script>
         function toggleAddressEdit(btn) {
             const form = btn.closest('.addressForm');
-            const inputs = form.querySelectorAll('input, select');
+            const inputs = form.querySelectorAll('input:not([type="hidden"])');
+            const saveBtn = form.querySelector('.saveBtn');
             const isDisabled = inputs[0].disabled;
+            
             inputs.forEach(input => input.disabled = !isDisabled);
-            btn.textContent = isDisabled ? 'Save' : 'Edit';
+            btn.style.display = isDisabled ? 'none' : 'block';
+            saveBtn.style.display = isDisabled ? 'block' : 'none';
         }
     </script>
 
@@ -294,6 +310,25 @@
             margin-top: -1rem !important;
             margin-left: 0 !important;
             display: block;
+        }
+    </style>
+
+    <style>
+        .address-card {
+            height: 100%;
+            transition: transform 0.2s;
+        }
+        
+        .address-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .btn-danger {
+            padding: 0.5rem 1rem;
+        }
+        
+        .gap-2 {
+            gap: 0.5rem;
         }
     </style>
 </body>

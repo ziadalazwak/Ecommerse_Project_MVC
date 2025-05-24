@@ -1,11 +1,21 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.IdentityModel.Tokens;
+using Ecommerse_Project_MVC.Models;
+using Ecommerse_Project_MVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient(); // for calling the backend API
+builder.Services.AddHttpContextAccessor();
+
+// Register CartVM as a scoped service
+builder.Services.AddScoped<CartVM>();
+builder.Services.AddScoped<ICartService, CartService>();
+
+// Register Email Service
+
 
 // ✅ Configure Cookie Authentication (used for MVC user sessions)
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -13,8 +23,13 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/UserAuthentication/Login";  // Adjusted to match your controller
         options.AccessDeniedPath = "/Home/Index";
-        options.ExpireTimeSpan = TimeSpan.FromDays(1);
+        options.ExpireTimeSpan = TimeSpan.FromDays(30); // Increased expiration time
         options.SlidingExpiration = true;
+        options.Cookie.Name = "Ecommerce.Auth";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.SameSite = SameSiteMode.Strict;
+        options.Cookie.IsEssential = true;
     });
 
 // ✅ Authorization services
@@ -29,7 +44,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();

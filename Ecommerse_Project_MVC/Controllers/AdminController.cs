@@ -12,9 +12,8 @@ namespace Ecommerse_Project_MVC.Controllers
        
         public AdminController(HttpClient httpClient)
         {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri("https://localhost:7019");
-    
+            _httpClient = httpClient; _httpClient.BaseAddress = new Uri(" https://localhost:7019");
+
         }
 
 
@@ -22,7 +21,7 @@ namespace Ecommerse_Project_MVC.Controllers
         public async Task<IActionResult> ControllPage(DashboardPaginationProductsDto dashboard)
         {
             // Build the URL with pageNumber and pageSize as query string parameters
-            var url = $"/Api/Product?pageNumber={dashboard.PageNumber}&pageSize={dashboard.PageSize}";
+            var url = $"/Api/Product/dashboard?pageNumber={dashboard.PageNumber}&pageSize={dashboard.PageSize}";
 
             var get_allProducts = await _httpClient.GetFromJsonAsync<DashboardResultDto>(url);
 
@@ -73,10 +72,13 @@ namespace Ecommerse_Project_MVC.Controllers
                     // Handle error response
 
                     if(response.IsSuccessStatusCode)
-                    TempData["Message"] = "Product Added successfully";
+                    TempData["Success"] = "Product Added successfully";
 
                     else
-                        TempData["Message"] = "Some thing Went Wrong";
+                    {
+                        var error = await response.Content.ReadAsStringAsync();
+                        TempData["Error"] = !string.IsNullOrWhiteSpace(error) ? error : "Failed to add product.";
+                    }
                     return RedirectToAction($"{nameof(ControllPage)}");
                 }
 
@@ -85,7 +87,7 @@ namespace Ecommerse_Project_MVC.Controllers
                 catch (Exception ex)
                 {
                     // Log the exception or handle it as needed
-                    TempData["message"] = "Error occurred while adding the product: " + ex.Message;
+                    TempData["Error"] = "An error occurred while adding the product: " + ex.Message;
                     return RedirectToAction("ControllPage");
                 }
             }
@@ -111,11 +113,18 @@ namespace Ecommerse_Project_MVC.Controllers
         public async Task<IActionResult> AddCategory(CreateCategoryVM category)
         {
 
-            var get_category = await _httpClient.PostAsJsonAsync<CreateCategoryVM>("api/Category",category);
-           if(get_category.IsSuccessStatusCode)
-            return RedirectToAction("Category");
+            var response = await _httpClient.PostAsJsonAsync<CreateCategoryVM>("api/Category",category);
+           if(response.IsSuccessStatusCode)
+           {
+               TempData["Success"] = "Category added successfully";
+           }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                TempData["Error"] = !string.IsNullOrWhiteSpace(error) ? error : "Failed to add category.";
+            }
 
-            TempData["ErrorMessage"] = "Error occurred while adding the product: ";
+
             return RedirectToAction("Category");
 
 
@@ -123,27 +132,79 @@ namespace Ecommerse_Project_MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var deleteProductRequest = await _httpClient.DeleteAsync($"api/Product/{id}");
-            string message;
             try
             {
-                message = await deleteProductRequest.Content.ReadAsStringAsync();
+                var deleteProductRequest = await _httpClient.DeleteAsync($"api/Product/{id}");
+                string message;
+
+                if (deleteProductRequest.IsSuccessStatusCode)
+                {
+                    message = await deleteProductRequest.Content.ReadAsStringAsync();
+                     TempData["Success"] = !string.IsNullOrWhiteSpace(message) ? message : "Product deleted successfully.";
+                }
+                else
+                {
+                     message = await deleteProductRequest.Content.ReadAsStringAsync();
+                     TempData["Error"] = !string.IsNullOrWhiteSpace(message) ? message : "Failed to delete product.";
+                }
             }
             catch
             {
-                message = "Something went wrong.";
+                TempData["Error"] = "An error occurred while deleting the product.";
             }
 
-            // ✅ Set message in TempData (success or error, your choice)
-            TempData["Message"] = !string.IsNullOrWhiteSpace(message)
-                ? message
-                : "No response message from server.";
             return RedirectToAction($"{nameof(ControllPage)}");
         }
+        [HttpPost]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+             try
+            {
+                var deleteCategoryRequest = await _httpClient.DeleteAsync($"api/Category/{id}");
+                string message;
+
+                if (deleteCategoryRequest.IsSuccessStatusCode)
+                {
+                    message = await deleteCategoryRequest.Content.ReadAsStringAsync();
+                     TempData["Success"] = !string.IsNullOrWhiteSpace(message) ? message : "Category deleted successfully.";
+                }
+                else
+                {
+                     message = await deleteCategoryRequest.Content.ReadAsStringAsync();
+                     TempData["Error"] = !string.IsNullOrWhiteSpace(message) ? message : "Failed to delete category.";
+                }
+            }
+            catch
+            {
+                TempData["Error"] = "An error occurred while deleting the category.";
+            }
+            return RedirectToAction($"{nameof(Category)}");
+        }
+        [HttpGet("GetProduct")]
+        public async Task<IActionResult> GetProduct(int id)
+        {
+            var product = await _httpClient.GetFromJsonAsync<ProductDetailsVM>($"api/Product/{id}");
+            if (product == null)
+                return RedirectToAction(nameof(ControllPage));
+
+            return View(product);
 
 
+        }
+        [HttpPost("UpdateProduct")]
+        public async Task<IActionResult> UpdateProduct(int id , UpdateProductVM updateProduct)
+        {
+            var token = Request.Cookies["AuthToken"];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var product = await _httpClient.PutAsJsonAsync($"api/Product/{id}", updateProduct);
+           string message = await product.Content.ReadAsStringAsync();
+            TempData["Message"]=message;
+            return RedirectToAction(nameof(ControllPage));
+
+         
 
 
+        }
 
     }
     }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Ecommerse_Project_MVC")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b6eee17f94692cbe5512fa528efd6cdae8b0a4c2")]
 [assembly: System.Reflection.AssemblyProductAttribute("Ecommerse_Project_MVC")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Ecommerse_Project_MVC")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

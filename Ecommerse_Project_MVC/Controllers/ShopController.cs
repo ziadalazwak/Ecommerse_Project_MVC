@@ -10,11 +10,11 @@ namespace Ecommerse_Project_MVC.Controllers
         public ShopController(HttpClient httpClient)
         {
             this.httpClient = httpClient;
-            httpClient.BaseAddress = new Uri("https://localhost:7019");
+            httpClient.BaseAddress = new Uri(" https://localhost:7019");
         }
         public async Task<IActionResult> ShopPage(ProductFilterVM filter)
         {
-            // Ensure filter values are set (fallback to defaults if necessary)
+            
          
             
             
@@ -58,9 +58,25 @@ namespace Ecommerse_Project_MVC.Controllers
             return RedirectToAction("ShopPage");
         }
 
+        [HttpGet("GetFirstProduct")]
+        public async Task<IActionResult> GetFirstProduct()
+        {
+            var filter = new ProductFilterVM { PageNumber = 1, PageSize = 1 };
+            var response = await httpClient.PostAsJsonAsync("api/product/Get_All", filter);
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("ShopPage");
+            }
 
+            var paginatedResult = await response.Content.ReadFromJsonAsync<PaginatedResultVM>();
+            if (paginatedResult?.Products?.Any() == true)
+            {
+                return RedirectToAction("GetProduct", "ProductDetails", new { id = paginatedResult.Products.First().Id });
+            }
 
-
+            return RedirectToAction("ShopPage");
+        }
     }
 }
 

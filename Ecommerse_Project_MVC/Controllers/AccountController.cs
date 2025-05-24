@@ -1,7 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using Ecommerse_Project_MVC.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerse_Project_MVC.Controllers
@@ -16,8 +15,8 @@ namespace Ecommerse_Project_MVC.Controllers
 
             _httpClient = httpClient;
            
-            _logger = logger; 
-            _httpClient.BaseAddress = new Uri("https://localhost:7019");
+            _logger = logger;
+            httpClient.BaseAddress = new Uri(" https://localhost:7019");
         }
         [HttpGet]
         public async Task<IActionResult> AccountDetails()
@@ -89,7 +88,61 @@ namespace Ecommerse_Project_MVC.Controllers
             return RedirectToAction("AccountDetails", "Account");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateAddress(AddressVM address)
+        {
+            try
+            {
+                var token = Request.Cookies["AuthToken"];
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
+                var response = await _httpClient.PutAsJsonAsync("/Api/Account/UpdateAddress", address);
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("AccountDetails");
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    TempData["Error"] = error;
+                    return RedirectToAction("AccountDetails");
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                return RedirectToAction("AccountDetails");
+            }
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> DeleteAddress(int AddressId)
+        {
+            try
+            {
+                var token = Request.Cookies["AuthToken"];
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                var response = await _httpClient.DeleteAsync($"/api/Account/DeleteAddress/{AddressId}");
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Success"] = "Address deleted successfully";
+                    return RedirectToAction("AccountDetails");
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    TempData["Error"] = error;
+                    return RedirectToAction("AccountDetails");
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                return RedirectToAction("AccountDetails");
+            }
+        }
     }
 }
